@@ -1,4 +1,10 @@
-function scan(ns, parent, server, list) {
+/**
+ * @param {NS} ns
+ * @param {string} parent
+ * @param {string} server
+ * @param {string[]} list
+ */
+ function scan(ns, parent, server, list) {
     const children = ns.scan(server);
     for (let child of children) {
         if (parent == child) {
@@ -10,7 +16,9 @@ function scan(ns, parent, server, list) {
     }
 }
 
+/** @param {NS} ns **/
 export function list_servers(ns) {
+    /** @type {string[]} */
     const list = [];
     scan(ns, '', 'home', list);
     return list;
