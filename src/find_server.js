@@ -1,4 +1,11 @@
-function recursiveScan(ns, parent, server, target, route) {
+/** 
+ * @param {NS} ns
+ * @param {string} parent
+ * @param {string} server
+ * @param {string} target
+ * @param {string[]} route
+ */
+ export function recursiveScan(ns, parent, server, target, route) {
     const children = ns.scan(server);
     for (let child of children) {
         if (parent == child) {
@@ -18,6 +25,7 @@ function recursiveScan(ns, parent, server, target, route) {
     return false;
 }
 
+/** @param {NS} ns */
 export async function main(ns) {
     const args = ns.flags([["help", false]]);
     let route = [];
@@ -38,6 +46,10 @@ export async function main(ns) {
     }
 }
 
+/**
+ *  @param {AutocompleteData} data
+ *  @param {string[]} args
+ */
 export function autocomplete(data, args) {
     return data.servers;
 }
