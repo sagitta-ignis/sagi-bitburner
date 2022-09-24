@@ -22,8 +22,24 @@ export async function main(ns) {
 		return;
 	}
 
-	const threads = Math.floor((ns.getServerMaxRam(host) - ns.getServerUsedRam(host)) / ns.getScriptRam(script));
+	const ram = ns.getScriptRam(script);
+	const available = ns.getServerMaxRam(host) - ns.getServerUsedRam(host);
+	const threads = Math.floor(available / ram);
+	if (threads <= 0) {
+		ns.tprint(`Server '${host}' requires more RAM (${available.toFixed(2)}/${ram}). Aborting.`);
+		return;
+	}
 	ns.tprint(`Launching script '${script}' on server '${host}' with ${threads} threads and the following arguments: ${script_args}`);
-	await ns.scp(script, ns.getHostname(), host);
+	await ns.scp(script, host, ns.getHostname());
 	ns.exec(script, host, threads, ...script_args);
+}
+
+/**
+ *  @param {AutocompleteData} data
+ *  @param {string[]} args
+ */
+export function autocomplete(data, args) {
+	if (args.length === 0 || !data.servers.includes(args[0])) return data.servers;
+	if (args.length >= 1) return data.scripts;
+    return [];
 }
