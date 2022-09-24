@@ -1,3 +1,4 @@
+/** @param {NS} ns */
 export async function main(ns) {
     const flags = ns.flags([
         ['refreshrate', 200],
@@ -30,6 +31,10 @@ export async function main(ns) {
     }
 }
 
+/**
+ *  @param {AutocompleteData} data
+ *  @param {string[]} args
+ */
 export function autocomplete(data, args) {
     return data.servers;
 }
