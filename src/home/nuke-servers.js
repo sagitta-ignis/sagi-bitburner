@@ -1,3 +1,4 @@
+import { update_data_file } from 'data/file.js';
 import { list_servers } from 'opened_servers.js';
 
 /** @param {NS} ns */
@@ -46,4 +47,5 @@ export async function main(ns) {
     ns.print("Acquired access to :");
     acquired.forEach(server => ns.print("  "+server));
     if (acquired.length>0) ns.toast(`Acquired access to ${acquired.length} servers`, "success", 1000*10);
+    await update_data_file(ns, "stats", { servers: list_servers(ns).filter(s => ns.hasRootAccess(s)).length });
 }
