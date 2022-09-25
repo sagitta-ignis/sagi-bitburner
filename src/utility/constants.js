@@ -1,5 +1,9 @@
 export function global_constants() {
     return {
+		scripts: {
+			deploy: "deploy.js",
+			loopWGH: "loop-wgh.js",
+		},
 		purchasedServerPrefix: "pserv",
 		prices: {
 			"2": 110000,
