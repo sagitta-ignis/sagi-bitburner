@@ -3,6 +3,10 @@ export function global_constants() {
 		scripts: {
 			deploy: "deploy.js",
 			loopWGH: "loop-wgh.js",
+			nukeServers: "/home/nuke-servers.js",
+			purchaseServers: "/home/purchase-servers.js",
+			purchaseHacknets: "/home/purchase-hacknets.js",		
+			loopServers: "/starter/loop-servers.js",
 		},
 		purchasedServerPrefix: "pserv",
 		prices: {
