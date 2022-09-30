@@ -14,6 +14,8 @@ export interface Executable<Data> {
     data?: Data;
 }
 
+// HWGW data structures
+
 export interface HWGWOperation extends Executable<HWGW> {
 
 }
@@ -25,6 +27,41 @@ export interface HWGW {
     money: number;
     security: number;
     growth: number;
+}
+
+export interface EstimatedTarget {
+    name: string;
+    start: number;
+    money: {
+        available: number;
+        max: number;
+        delta: number;
+    };
+    security: {
+        level: number;
+        min: number;
+        delta: number;
+    };
+    hackable: boolean;
+    optimized: number;
+    operations: HWGWOperation[];
+    productionPerMillisecond: number;
+}
+
+export interface AvailableHost {
+    name: string;
+    root: boolean;
+    ram: {
+        max: number;
+        used: number;
+        available: number;
+    };
+}
+
+export interface HWGWBatch {
+    target: EstimatedTarget;
+    operations: HWGWOperation[];
+    executed: HWGWOperation[];
 }
 
 // Print utility

@@ -3,11 +3,19 @@ export function global_constants() {
 		scripts: {
 			deploy: "deploy.js",
 			loopWGH: "loop-wgh.js",
+			hack: "hack.js",
+			grow: "grow.js",
+			weaken: "weaken.js",
 			nukeServers: "/home/nuke-servers.js",
 			purchaseServers: "/home/purchase-servers.js",
 			purchaseHacknets: "/home/purchase-hacknets.js",		
 			loopServers: "/starter/loop-servers.js",
+			hwgw: "/starter/hwgw.js",
+			scheduleHWGW: "/starter/schedule-hwgw.js"
 		},
+		weakenRam: 1.75,
+		growRam: 1.75,
+		hackRam: 1.70,
 		purchasedServerPrefix: "pserv",
 		prices: {
 			"2": 110000,

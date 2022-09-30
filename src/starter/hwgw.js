@@ -13,7 +13,7 @@ const { hackRam, growRam, weakenRam } = global_constants();
  * @param {number} timeWindow
  * @return {Array<HWGWOperation>}
  */
- export function hwgw(ns, target, percent, timeWindow = 100) {
+ export function hwgw(ns, target, percent, timeWindow = 100, start = Date.now()) {
     const batchSteps = 4;
 
     // check target for optimized batch
@@ -25,15 +25,16 @@ const { hackRam, growRam, weakenRam } = global_constants();
 
     // prepare batch window
     const growPerc = (percent / 100.0);
-    const hackMoney = growPerc * max;
+    let hackMoney = growPerc * max;
+
+    const hackTime = ns.getHackTime(target);
+    const hackThreads = Math.max(1, Math.ceil(ns.hackAnalyzeThreads(target, hackMoney)));
+    hackMoney = hackThreads * ns.hackAnalyze(target) * max;
+    const hackSec = ns.hackAnalyzeSecurity(hackThreads, target);
 
     const moneyAmount = canHack ? max - hackMoney : money;
     const growthAmount = Math.max(1.1, max / moneyAmount);
     const weakenAmount = ns.weakenAnalyze(1);
-
-    const hackTime = ns.getHackTime(target);
-    const hackThreads = Math.max(1, Math.ceil(ns.hackAnalyzeThreads(target, hackMoney)));
-    const hackSec = ns.hackAnalyzeSecurity(hackThreads, target);
 
     const weakenSec = canHack ? hackSec : security - min;
     const weakenTime = ns.getWeakenTime(target);
@@ -49,7 +50,7 @@ const { hackRam, growRam, weakenRam } = global_constants();
     /** @type {Array<HWGWOperation>} */
     const batch = [];
 
-    let weakenStartAt = Date.now();
+    let weakenStartAt = start;
     let weakenDueAt = weakenStartAt + weakenTime;
 
     let hackStartAt = 0;
@@ -59,7 +60,7 @@ const { hackRam, growRam, weakenRam } = global_constants();
     let growDueAt = 0;
 
     let reweakenStartAt = 0;
-    let reweakenDueAt = Date.now();
+    let reweakenDueAt = start;
 
     if (canHack) {
         hackStartAt = weakenDueAt - hackTime - (timeWindow / batchSteps);
@@ -69,7 +70,7 @@ const { hackRam, growRam, weakenRam } = global_constants();
                 script: 'hack.js',
                 threads: hackThreads,
                 args: [target, date_format(ns, hackStartAt)],
-                data: { target, start: hackStartAt, end: hackDueAt,ram: hackRam, money: -1 * hackMoney, security: hackSec }
+                data: { target, start: hackStartAt, end: hackDueAt,ram: hackRam, money: -1 * hackMoney, max, security: hackSec }
             },
         )
     }
@@ -95,7 +96,7 @@ const { hackRam, growRam, weakenRam } = global_constants();
             script: 'grow.js',
             threads: growThreads,
             args: [target, date_format(ns, growStartAt)],
-            data: { target, start: growStartAt, end: growDueAt,ram: growRam, money: (growthAmount - 1) * money, security: growSec, growth: growthAmount }
+            data: { target, start: growStartAt, end: growDueAt,ram: growRam, money: (growthAmount - 1) * money, max, security: growSec, growth: growthAmount }
         },
         {
             script: 'weaken.js',

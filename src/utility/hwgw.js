@@ -49,6 +49,13 @@ export async function run_operations(ns, operations) {
         if(operation.pid == 0) break;
         executing.push(operation);
     }
+    // cancel if cannot run whole batch
+    if (executing.length !== operations.length) {
+        while(executing.length > 0) {
+            let operation = executing.pop();
+            ns.kill(operation.pid, operation.host);
+        }
+    }
     return executing;
 }
 
@@ -64,9 +71,9 @@ export function print_operations(ns, batch) {
         host: { label: 'Host' },
         threads: { label: 'Threads' },
         script: { label: 'Script' },
-        money: { label: 'Money', signed: true, format: (sign, value, op) => op.script && Number.isFinite(value) ? sign+ns.nFormat(value, "0.000a") : `${value}` },
+        money: { label: 'Money', signed: true, format: (sign, value,op) => Number.isFinite(value) ? (op.script?sign:'')+ns.nFormat(value, "0.000a") : `${value}` },
         security: { label: 'Security', signed: true, format: (sign, value, op) => `${op.script?sign:''}${value.toFixed(2)}` },
-        growth: { label: 'Growth' },
+        growth: { label: 'Growth', format: (sign, value) => Number.isFinite(value) ? value.toFixed(2) : `${value}` },
     }
     print_objects(ns, batch.map(o=>({...o,...o.data})), headers);
 }

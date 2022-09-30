@@ -8,8 +8,10 @@ const {
 const {
 	nukeServers,
 	loopServers,
+	scheduleHWGW,
 	purchaseServers,
 	purchaseHacknets,
+	installBackdoors,
 } = scripts;
 
 /** @param {NS} ns */
@@ -20,6 +22,9 @@ export async function main(ns) {
 	let previousHacking = 0;
 	let previousServers = 0;
 	let previousPurchasedServers = 0;
+
+	/** @type {Map<string, number>} */
+	const processes = new Map();
 
 	while (true) {
 		const stats = read_data_file(ns, "stats");
@@ -40,7 +45,10 @@ export async function main(ns) {
 		}
 
 		if (servers != previousServers) {
-			if (!ns.isRunning(loopServers, "home")) active = ns.run(loopServers, 1, loopWGH.target);
+			// if (!ns.isRunning(loopServers, "home")) active = ns.run(loopServers, 1, loopWGH.target);
+		}
+		if ((processes.has(scheduleHWGW) && !ns.isRunning(processes.get(scheduleHWGW))) || !ns.isRunning(scheduleHWGW)) {
+			processes.set(scheduleHWGW, active = ns.run(scheduleHWGW));
 		}
 
 		if (purchasing.servers.enabled) {
