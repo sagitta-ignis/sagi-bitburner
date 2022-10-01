@@ -32,12 +32,14 @@ export function analyze_server(ns, server) {
         },
         money: {
             max: maxMoney,
-            available: moneyAvailable
+            available: moneyAvailable,
+            delta: maxMoney - moneyAvailable,
         },
         root: rootAccess,
         security: {
             min: minSec,
-            level: sec
+            level: sec,
+            delta: sec - minSec,
         },
         growth: {
             rate: growth,
