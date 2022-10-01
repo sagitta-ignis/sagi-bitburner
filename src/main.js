@@ -11,7 +11,7 @@ const {
 	scheduleHWGW,
 	purchaseServers,
 	purchaseHacknets,
-	installBackdoors,
+	installBackdoor,
 } = scripts;
 
 /** @param {NS} ns */
@@ -40,12 +40,14 @@ export async function main(ns) {
 
 		let active = false;
 
-		if (previousHacking===0 || Math.floor(previousHacking / 10) != Math.floor(hacking / 10)) {
+		if (previousHacking != hacking) {
 			active = ns.run(nukeServers, 1);
+			active = ns.run(installBackdoor, 1);
 		}
 
 		if (servers != previousServers) {
 			// if (!ns.isRunning(loopServers, "home")) active = ns.run(loopServers, 1, loopWGH.target);
+			active = ns.run(installBackdoor, 1);
 		}
 		if ((processes.has(scheduleHWGW) && !ns.isRunning(processes.get(scheduleHWGW))) || !ns.isRunning(scheduleHWGW)) {
 			processes.set(scheduleHWGW, active = ns.run(scheduleHWGW));

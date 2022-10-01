@@ -11,7 +11,8 @@ export function global_constants() {
 			purchaseHacknets: "/home/purchase-hacknets.js",		
 			loopServers: "/starter/loop-servers.js",
 			hwgw: "/starter/hwgw.js",
-			scheduleHWGW: "/starter/schedule-hwgw.js"
+			scheduleHWGW: "/starter/schedule-hwgw.js",
+			installBackdoor: "/singularity/install-backdoor.js",
 		},
 		weakenRam: 1.75,
 		growRam: 1.75,
