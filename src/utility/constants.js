@@ -13,7 +13,9 @@ export function global_constants() {
 			hwgw: "/starter/hwgw.js",
 			scheduleHWGW: "/starter/schedule-hwgw.js",
 			installBackdoor: "/singularity/install-backdoor.js",
+			addPrograms: "/singularity/add-programs.js",
 		},
+		home: "home",
 		weakenRam: 1.75,
 		growRam: 1.75,
 		hackRam: 1.70,
@@ -40,5 +42,17 @@ export function global_constants() {
 			"524288": 28835840000,
 			"1048576": 57671680000,
 		},
+		programs: [
+			"AutoLink.exe",
+			"BruteSSH.exe",
+			"DeepscanV1.exe",
+			"ServerProfiler.exe",
+			"FTPCrack.exe",
+			"relaySMTP.exe",
+			"DeepscanV2.exe",
+			"HTTPWorm.exe",
+			"SQLInject.exe",
+			"Formulas.exe",
+		],
 	};
 }

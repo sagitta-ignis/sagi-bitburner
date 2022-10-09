@@ -3,6 +3,7 @@ import { read_data_file } from 'data/file.js';
 
 const {
     scripts,
+	programs,
 } = global_constants();
 
 const {
@@ -12,6 +13,7 @@ const {
 	purchaseServers,
 	purchaseHacknets,
 	installBackdoor,
+	addPrograms,
 } = scripts;
 
 /** @param {NS} ns */
@@ -19,6 +21,7 @@ export async function main(ns) {
     ns.disableLog("ALL");
 	ns.enableLog("run");
 
+	let previousPrograms = 0;
 	let previousHacking = 0;
 	let previousServers = 0;
 	let previousPurchasedServers = 0;
@@ -40,15 +43,17 @@ export async function main(ns) {
 
 		let active = false;
 
-		if (previousHacking != hacking) {
-			active = ns.run(nukeServers, 1);
-			active = ns.run(installBackdoor, 1);
+		if (stats.programs < programs.length) {
+			if (!ns.isRunning(addPrograms, "home")) active = ns.run(addPrograms);
+		}
+		if (previousHacking != hacking || previousPrograms != stats.programs) {
+			if (!ns.isRunning(nukeServers, "home")) active = ns.run(nukeServers);
+			if (!ns.isRunning(installBackdoor, "home")) active = ns.run(installBackdoor);
+		}
+		if (servers != previousServers) {
+			if (!ns.isRunning(installBackdoor, "home")) active = ns.run(installBackdoor);
 		}
 
-		if (servers != previousServers) {
-			// if (!ns.isRunning(loopServers, "home")) active = ns.run(loopServers, 1, loopWGH.target);
-			active = ns.run(installBackdoor, 1);
-		}
 		if ((processes.has(scheduleHWGW) && !ns.isRunning(processes.get(scheduleHWGW))) || !ns.isRunning(scheduleHWGW)) {
 			processes.set(scheduleHWGW, active = ns.run(scheduleHWGW));
 		}
@@ -61,6 +66,7 @@ export async function main(ns) {
 			if (!ns.isRunning(purchaseHacknets, "home", "--auto")) active = ns.run(purchaseHacknets, 1, "--auto");
 		}
 
+		previousPrograms = stats.programs;
 		previousHacking = hacking;
 		previousServers = servers;
 		previousPurchasedServers = purchasedServers;
